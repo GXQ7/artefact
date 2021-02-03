@@ -16,7 +16,6 @@ uploaded_file = st.file_uploader("", type=["jpg","png"])
 
 if uploaded_file is not None:
     bytes_data = uploaded_file.read()  #returns byte contents of file
-    #TODO: figure out how to resize image
     st.image(bytes_data, use_column_width=True)
 
 
