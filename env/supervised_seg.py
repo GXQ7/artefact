@@ -1,7 +1,19 @@
 import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
- 
+import urllib.request as request
+
+def load_coloured_img(src_img_path):
+    #opencv defaults to bgr colour order for images - needs changed if displaying with matplotlib
+    img_bgr = cv.imread(src_img_path)
+    return img_bgr
+
+
+def convert_greyscale(colour_img):
+    greyscale_img = cv.cvtColor(colour_img, cv.COLOR_BGR2GRAY)
+    return greyscale_img
+  
+#----------------------------------------------------------------------------------------------------------
 
 def image_show_plt(img):
     plt.imshow(img)
@@ -45,3 +57,17 @@ def supervised_bin_thresh(srcImg, thresholdVal, higher_val, thres_type):
     # plt.show()
     return thresh_img
 
+
+def url_to_img(url):
+    #download image, convert to numpy array and read into opencv format
+    resp = request.urlretrieve(url)
+    image = np.asarray(bytearray(resp.read()), dtype="uint8")
+    image = cv2.imdecode(image)
+    return image
+
+
+  
+img = load_coloured_img("C:/Users/gquin/Desktop/artefact/env/GlaucomaImages/001.jpg")
+greyimg = convert_greyscale(img)
+cv.imshow('', greyimg)
+cv.waitKey(0)

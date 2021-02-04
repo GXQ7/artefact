@@ -1,28 +1,33 @@
 import streamlit  as st
 import io
-import cv2 
+import cv2 as cv
 import supervised_seg as ss
 import numpy as np 
-
+import PIL.Image as Image
 
 
 st.title("Web-based Image Segmentation Tool")
+# uploaded_file_objs = st.file_uploader("", type=["jpg","png"], accept_multiple_files=True, key="uploader")
 
-uploaded_file = st.file_uploader("", type=["jpg","png"])
+# #The UploadedFile class is a subclass of BytesIO, and therefore it is “file-like”. 
+# # This means you can pass them anywhere where a file is expected.
+# # >>> None or Uploaded File
 
-#The UploadedFile class is a subclass of BytesIO, and therefore it is “file-like”. 
-# This means you can pass them anywhere where a file is expected.
-# >>> None or Uploaded File
+# if uploaded_file_objs is not None:
+#     print("not none")
 
-if uploaded_file is not None:
-    bytes_data = uploaded_file.read()  #returns byte contents of file
-    st.image(bytes_data, use_column_width=True)
-
-
-
-# user will be able to apply pre-procesing technqiues using a (menu or buttons)
+img = st.image("GlaucomaImages\\001.jpg", use_column_width=True, key="uploader")
 
 """Pre-processing Techniques"""
+grey = st.button("Convert to Grey Scale", key='grey')
+if grey: 
+    img = cv.imread("GlaucomaImages\\001.jpg", 1)
+    ss.convert_greyscale(img) #error - expecting <cv::Umat>
+    
+    st.image(img, use_column_width=True)
+
+
+
 smooth = st.button("Smooth image", key='smooth')
 enhance = st.button("Enhance image", key='enchance')
 
