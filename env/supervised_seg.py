@@ -68,6 +68,7 @@ def url_to_img(url):
 
   
 img = load_coloured_img("C:/Users/gquin/Desktop/artefact/env/GlaucomaImages/001.jpg")
-greyimg = convert_greyscale(img)
-cv.imshow('', greyimg)
+resized = resize_image(img, 20)
+greyimg = convert_greyscale(resized)
+cv.imshow('Glaucoma Image 001', greyimg)
 cv.waitKey(0)
