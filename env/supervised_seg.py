@@ -8,10 +8,16 @@ def load_coloured_img(src_img_path):
     img_bgr = cv.imread(src_img_path)
     return img_bgr
 
-
 def convert_greyscale(colour_img):
     greyscale_img = cv.cvtColor(colour_img, cv.COLOR_BGR2GRAY)
     return greyscale_img
+
+#TODO:
+def smooth_image():
+    pass
+
+def enhance_image():
+    pass
   
 #----------------------------------------------------------------------------------------------------------
 
@@ -27,7 +33,7 @@ def resize_image(img, scale_percent):
     resized = cv.resize(img, dim, interpolation = cv.INTER_AREA)
     return resized
     
-def display_histogram(image, xlabel="", ylabel="", title="" ):
+def display_histogram(grey_image, xlabel="", ylabel="", title="" ):
     fig, ax = plt.subplots(1, 1)
     ax.hist(image.ravel(), bins=32, range=[0, 256])
     ax.set_xlim(0, 256)
@@ -36,16 +42,13 @@ def display_histogram(image, xlabel="", ylabel="", title="" ):
     plt.title(title)
     plt.show()
 
-def remove_background(src_img_path):
+def remove_background(src_img, grey_image):
     # TODO: Check with Silvester why the levels of black in the histogram are still high
-    file_name = src_img_path
-    src = cv.imread(file_name, 1)
-    tmp = cv.cvtColor(src, cv.COLOR_BGR2GRAY)
-    _,alpha = cv.threshold(tmp,40,255,cv.THRESH_BINARY)
+    _,alpha = cv.threshold(grey_image,100,255,cv.THRESH_BINARY)
     #split image into blue, green and red array 
-    b, g, r = cv.split(src)
-    rgba = [b,g,r, alpha]
-    dst = cv.merge(rgba,4)
+    blue, green, red = cv.split(src_img)
+    bgra = [blue, green, red, alpha]
+    dst = cv.merge(bgra,4)
     return dst
 
 def supervised_bin_thresh(srcImg, thresholdVal, higher_val, thres_type):
@@ -70,5 +73,6 @@ def url_to_img(url):
 img = load_coloured_img("C:/Users/gquin/Desktop/artefact/env/GlaucomaImages/001.jpg")
 resized = resize_image(img, 20)
 greyimg = convert_greyscale(resized)
+# removed = remove_background(img, greyimg)
 cv.imshow('Glaucoma Image 001', greyimg)
 cv.waitKey(0)
