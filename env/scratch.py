@@ -6,33 +6,46 @@ import matplotlib.pyplot as plt
 rgb_test = pp.load_coloured_img("GlaucomaImages/001.jpg")
 grey_test = pp.convert_greyscale(rgb_test)
 
+def show(img):
+    resized = ss.resize_image(img, 30)
+    cv.imshow('Image', img)
+    cv.waitKey(0)
+    return
+
 
 #pre_processing
-img = cv.imread("GlaucomaImages/001.jpg")
+img = cv.cvtColor(rgb_test, cv.COLOR_BGR2RGB)
+grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 g = pp.get_green_channel(img)
-img = pp.enhance_image(g)
-blur = cv.medianBlur(img, 5)
-resized = ss.resize_image(blur, 30)
-cv.imshow('blurred', resized)
-cv.waitKey(0)
+blur = cv.medianBlur(g, 5)
+enhance = pp.enhance_image(g)
 
-# #thresholding
-# ret1, th1 = cv.threshold(blur, 10, 255, cv.THRESH_BINARY)
-# ret12, th2 = cv.adaptiveThreshold(blur, 255, cv.ADAPTIVE_THRESH_MEAN_C, )
 
-# ret1, th1 = cv.threshold(blur, 10, 255, cv.THRESH_BINARY)
-# ret1, th1 = cv.threshold(blur, 10, 255, cv.THRESH_BINARY)
+# display pre-processing techniques
+# titles = ['Original', 'Grey Scale','Green Channel', 'Median Blur','CLAHE Enhanced']
+# images = [img, grey, g, blur, enhance]
+# for i in range(5):
+#     plt.subplot(3,2,i+1),plt.imshow(images[i],'gray')
+#     plt.title(titles[i])
+#     plt.xticks([]),plt.yticks([])
+# plt.show()
 
-# ret,th1 = cv.threshold(img,127,255,cv.THRESH_BINARY)
-# th2 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_MEAN_C,\
+
+#thresholding
+ret1, th1 = cv.threshold(enhance, 10, 255, cv.THRESH_BINARY)
+th2 = cv.adaptiveThreshold(enhance,255,cv.ADAPTIVE_THRESH_MEAN_C,\
+            cv.THRESH_BINARY,11,2)
+
+# th3 = cv.adaptiveThreshold(enhance,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,\
 #             cv.THRESH_BINARY,11,2)
-# th3 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,\
-#             cv.THRESH_BINARY,11,2)
-# titles = ['Original Image', 'Global Thresholding (v = 127)',
-#             'Adaptive Mean Thresholding', 'Adaptive Gaussian Thresholding']
-# images = [img, th1, th2, th3]
-# for i in range(4):
-#     plt.subplot(2,2,i+1),plt.imshow(images[i],'gray')
+# ret4, th4 = cv.threshold(enhance, 10, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
+
+
+# titles = ['Pre-Processed Image', 'Global Thresholding (value = 10)',
+#             'Adaptive Mean Thresholding', 'Adaptive Gaussian Thresholding', 'Otsu Thresholding']
+# images = [enhance, th1, th2, th3, th4]
+# for i in range(5):
+#     plt.subplot(3,2,i+1),plt.imshow(images[i],'gray')
 #     plt.title(titles[i])
 #     plt.xticks([]),plt.yticks([])
 # plt.show()

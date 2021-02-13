@@ -33,3 +33,22 @@ def display_histogram(grey_image, xlabel="", ylabel="", title="" ):
     plt.title(title)
     plt.show()
 
+def resize_image(img, scale_percent):
+    width = int(img.shape[1] * scale_percent / 100)
+    height = int(img.shape[0] * scale_percent / 100)
+    dim = (width, height)
+    resized = cv.resize(img, dim, interpolation = cv.INTER_AREA)
+    return resized
+    
+
+def remove_background(src_img, grey_image):
+    # # TODO: figure out why image histogram still has high levels of black
+    # _,alpha = cv.threshold(grey_image,5,255,cv.THRESH_BINARY)
+    # #split image into blue, green and red array 
+    # b, g, r = cv.split(src_img)
+    # #apply the alpha channel containing the threshold of the foreground
+    # bgra = [b, g, r, alpha]
+    # dst = cv.merge(bgra,4)
+    return NotImplementedError
+    
+
