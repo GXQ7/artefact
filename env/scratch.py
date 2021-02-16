@@ -19,6 +19,7 @@ grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 g = pp.get_green_channel(img)
 blur = cv.medianBlur(g, 5)
 enhance = pp.enhance_image(g)
+ss.display_histogram(enhance, "bins", "frequency of bins", "Histogram of CLAHE enhanced image")
 
 
 # display pre-processing techniques
@@ -32,9 +33,9 @@ enhance = pp.enhance_image(g)
 
 
 #thresholding
-ret1, th1 = cv.threshold(enhance, 10, 255, cv.THRESH_BINARY)
-th2 = cv.adaptiveThreshold(enhance,255,cv.ADAPTIVE_THRESH_MEAN_C,\
-            cv.THRESH_BINARY,11,2)
+# ret1, th1 = cv.threshold(enhance, 10, 255, cv.THRESH_BINARY)
+# th2 = cv.adaptiveThreshold(enhance,255,cv.ADAPTIVE_THRESH_MEAN_C,\
+#             cv.THRESH_BINARY,11,2)
 
 # th3 = cv.adaptiveThreshold(enhance,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,\
 #             cv.THRESH_BINARY,11,2)
@@ -50,6 +51,7 @@ th2 = cv.adaptiveThreshold(enhance,255,cv.ADAPTIVE_THRESH_MEAN_C,\
 #     plt.xticks([]),plt.yticks([])
 # plt.show()
 
+#snakes / deformable models / active contours
 
 
 
