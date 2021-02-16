@@ -27,7 +27,7 @@ ss.display_histogram(enhance, "bins", "frequency of bins", "Histogram of CLAHE e
 # images = [img, grey, g, blur, enhance]
 # for i in range(5):
 #     plt.subplot(3,2,i+1),plt.imshow(images[i],'gray')
-#     plt.title(titles[i])
+#     plt.title(titles[i]) 
 #     plt.xticks([]),plt.yticks([])
 # plt.show()
 
