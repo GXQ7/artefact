@@ -1,8 +1,8 @@
+import cv2
+import numpy as np
 import os
 import csv
-import numpy as np
-import cv2
-
+ 
 
 def extract_bv(image):		
 	b,green_fundus,r = cv2.split(image)
@@ -20,29 +20,21 @@ def extract_bv(image):
 	f5 = clahe.apply(f4)		
 
 	# removing very small contours through area parameter noise removal
-	ret,f6 = cv2.threshold(f5,15,255,0)	
+	ret,f6 = cv2.threshold(f5,15,255,cv2.THRESH_BINARY)	
 	mask = np.ones(f5.shape[:2], dtype="uint8") * 255	
-	contours, hierarchy = cv2.findContours(f6.copy(),cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)	
+	im2, contours, hierarchy = cv2.findContours(f6.copy(),cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
 	for cnt in contours:
 		if cv2.contourArea(cnt) <= 200:
 			cv2.drawContours(mask, [cnt], -1, 0, -1)			
 	im = cv2.bitwise_and(f5, f5, mask=mask)
-	# ret,fin = cv2.threshold(im,15,255,cv2.THRESH_BINARY_INV)
-	
-
-	# img_blurred = cv2.medianBlur(im, 5) 
-	# fin = cv2.adaptiveThreshold(im,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
-    # cv2.THRESH_BINARY,11,2)			
-	
-
-
-	newfin = cv2.erode(im, cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(3,3)), iterations=1)	
+	ret,fin = cv2.threshold(im,15,255,cv2.THRESH_BINARY_INV)			
+	newfin = cv2.erode(fin, cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(3,3)), iterations=1)	
 
 	# removing blobs of unwanted bigger chunks taking in consideration they are not straight lines like blood
 	#vessels and also in an interval of area
 	fundus_eroded = cv2.bitwise_not(newfin)	
 	xmask = np.ones(fundus.shape[:2], dtype="uint8") * 255
-	xcontours, xhierarchy = cv2.findContours(fundus_eroded.copy(),cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)	
+	x1, xcontours, xhierarchy = cv2.findContours(fundus_eroded.copy(),cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)	
 	for cnt in xcontours:
 		shape = "unidentified"
 		peri = cv2.arcLength(cnt, True)
@@ -58,15 +50,6 @@ def extract_bv(image):
 	blood_vessels = cv2.bitwise_not(finimage)
 	return blood_vessels	
 
-if __name__ == "__main__":	
-	pathFolder = "/Users/gquin/Desktop/GlaucomaImages"
-	filesArray = [x for x in os.listdir(pathFolder) if os.path.isfile(os.path.join(pathFolder,x))]
-	destinationFolder = "/Users/gquin/Desktop/GlaucomaImages/Thresholded"
-	if not os.path.exists(destinationFolder):
-		os.mkdir(destinationFolder)
-	for file_name in filesArray:
-		file_name_no_extension = os.path.splitext(file_name)[0]
-		fundus = cv2.imread(pathFolder+'/'+file_name)		
-		bloodvessel = extract_bv(fundus)
-		cv2.imwrite(destinationFolder+file_name_no_extension+"_bloodvessel.png",bloodvessel)
-    
+fundus = cv2.imread("GlaucomaImages/001.jpg")
+bloodvessel = extract_bv(fundus)
+cv2.imwrite("bloodvessel.png", bloodvessel)

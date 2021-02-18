@@ -1,8 +1,11 @@
 import cv2 as cv
-import numpy as np
 import matplotlib.pyplot as plt
-import urllib.request as request
 import preprocessing as pp
+import numpy as np
+from skimage.segmentation import active_contour
+from skimage import data
+from skimage.color import rgb2gray
+from skimage.filters import gaussian
 
 
 def first_method_thresholding(src):
@@ -14,10 +17,27 @@ def first_method_thresholding(src):
     cv.THRESH_BINARY,11,2)
     return th3
 
-def second_method_active_contours(src):
-    # pre-processing            #TODO: today 
-    # active conoturs 
-    pass
+def skikit_active_contours():
+    img = data.astronaut()
+    img = rgb2gray(img)
+
+    s = np.linspace(0, 2*np.pi, 400)
+    r = 100 + 100*np.sin(s)
+    c = 220 + 100*np.cos(s)
+    init = np.array([r, c]).T
+
+    snake = active_contour(gaussian(img, 3),
+                        init, alpha=0.015, beta=10, gamma=0.001)
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+    ax.imshow(img, cmap=plt.cm.gray)
+    ax.plot(init[:, 1], init[:, 0], '--r', lw=3)
+    ax.plot(snake[:, 1], snake[:, 0], '-b', lw=3)
+    ax.set_xticks([]), ax.set_yticks([])
+    ax.axis([0, img.shape[1], img.shape[0], 0])
+
+    plt.show()
+    return
 
 def third_method_random_walker(src):         # TODO: tomorrow 
     # pre_processing 
